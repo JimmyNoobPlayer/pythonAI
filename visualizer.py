@@ -83,13 +83,20 @@ net.) '''
 
     numpoints = 60 #the default number of points along one dimension (total number of points is this value squared)
 
+#okay so pointsList holds the points in [x,y] format, not numpy column vectors.
     pointsList = []
 
     for x in np.linspace(minx, maxx, numpoints, endpoint=True):
         for y in np.linspace(miny, maxy, numpoints, endpoint=True):
             point = (x,y)
             pointvector = np.array([[x],[y]])
-            scalarvalue = fn(pointvector)[0,0]
+
+            #debugging
+##            print("how is pointvector considered two arguments?")
+##            print(pointvector)
+
+            fnoutput = fn(pointvector)
+            scalarvalue = fnoutput[0,0]
             pointsList.append( (scalarvalue, point) )
 
     valueList = [p[0] for p in pointsList]
@@ -98,12 +105,12 @@ net.) '''
     minv = min(valueList)
 
     
-    plt.title(title + "\nmax: " + str(maxv) + "\nmin: " + str(minv))
+    plt.title(title + "\nmax: " + str(maxv) + ", min: " + str(minv))
     
     for p in pointsList:
         plt.scatter(p[1][0], p[1][1], c=getcolor(p[0], maxv, minv), edgecolors="none")
 
     plt.show()
-    ##end function showdefaultsquarescaled
+    ##end function plotfun
 
     

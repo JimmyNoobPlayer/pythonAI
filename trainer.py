@@ -63,29 +63,37 @@ selects a random point, it will only select one of these.
 This is meant to be a trainer that is very simple to observe
 and can be approximated by a neural net exactly.'''
 
-    def fn(v):
-        '''takes a 2d column vector, returns a continuous function that matches the trainer at the 5 relevant points.'''
-        #the return value is only a function of the first value in v
-        if(v[0,0]>0.5): value = 1.7-1.6*v[0,0]
-        else: value = 0.1+1.6*v[0,0]
-        return np.array([[value]])
+
     def __init__(self):
-        pass #no variation in trainers, this could possibly be a static class, but I don't want to change anything if I can help it.
+        self.fn = wedge #no variation in trainers, this could possibly be a static class, but I don't want to change anything if I can help it.
     def __iter__(self):
         return self
     def __next__(self):
         '''these dictionaries define the function'''
         possible_points = "abcde"
         points_selector = {"a":(0.0,0.0), "b":(0.0,1.0), "c":(1.0,0.0), "d":(1.0,1.0), "e":(0.5,0.5)}
-        value_selector = {"a":0.0, "b":0.0, "c":0.0, "d":0.0, "e":1.0}
+        value_selector = {"a":0.1, "b":0.1, "c":0.1, "d":0.1, "e":0.9}
 
         r = random.choice(possible_points)
         rp = points_selector[r]
+
+        #debugging
+##        print("the point given in the trainer")
+##        print(rp)
+        
         rv = value_selector[r]
         point = np.array([[rp[0]],[rp[1]]])
         value = np.array([[rv]])
 
         return (point,value)
+    
+def wedge(v):
+    '''takes a 2d column vector, returns a continuous function that matches the trainer at the 5 relevant points.'''
+    #the return value is only a function of the first value in v
+    inputval = v[0,0]
+    if(inputval>0.5): value = 1.7-1.6*inputval
+    else: value = 0.1+1.6*inputval
+    return np.array([[value]])
     
     
 
@@ -111,4 +119,5 @@ column vector as well.'''
 
 example_c = function_approx_trainer(2, example_circlefunction)
 example_m = function_approx_trainer(2, example_maxfunction)
+example_t = limited_trainer()
         
