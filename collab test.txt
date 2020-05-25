@@ -1,2 +1,7 @@
 Collaboration test....
+<<<<<<< HEAD
 I'm gonna add this line in my desktop computer...
+=======
+This line I added from my laptop (second, but commited this first)
+>>>>>>> 4cfa906662abd60280b83a71ddd4af63617ad3b2
+this is what it looked like in the merge. I am horrified but I guess merging like this may not be simple in some cases.
