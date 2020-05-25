@@ -1,0 +1,22 @@
+for every vector use a subclass of List that can transform itself into a numpy column vector (every vector used by the neural net is in numpy column vector format, a two-dimensional matrix with the second dimension of size 1.)
+
+to change a python list into the proper format... (assuming the list contains only scalar values, no tuples or anthing funny)
+reshapedArray = (np.array(a)).reshape(len(a),1)
+
+np.random.uniform(0.0, 1.0, [self.length, 1])
+np.array([[x1],[x2],[x3]...])
+
+(should be in neuralnetutil.py and be used throughout the whole project)
+
+
+
+
+The heart of this package is neuralnet.net in the file neuralnet.py, an object that holds all the weights and biases in many layers to represent a neural net (which is a thing capable of approximating any arbitrary function to a reasonable degree of accuracy -depending on how big the neural net is- and has a backpropagation algorithm capable of minimizing the error of the net to match any function (which in practice is commonly a list of human-labeled data, or output from a crazy Monte-Carlo Tree Search gameplay system.)
+
+
+trainer.py...
+
+
+visualizer.py...
+
+
