@@ -14,9 +14,18 @@ tuple of two numpy column vectors, (input, ex_output)
 
 import numpy as np
 
+def default_random_function():
+    return np.random.uniform(low=0., high=1.)
 
-##class nnvector(object):
-##    def __init__(self, valueslist, minv=0.0, maxv=1.0):
+class nnlist(list):
+        
+    def vec(self):
+        return np.array(self).reshape(len(self), 1)
+
+
+def rand_nnlist(length):
+    return nnlist([default_random_function() for x in range(length)])
+        
 
 
 

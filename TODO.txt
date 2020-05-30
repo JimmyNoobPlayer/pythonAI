@@ -1,6 +1,10 @@
-complete the Design Doc and determine exactly the responsibilities of the neuralnet, trainer, and visualizer modules.
+complete the Design Doc and determine exactly the responsibilities of the neuralnet, trainer, and visualizer modules. Determine what kind of visualizations are needed, and how to work with trainers that can't be visualized in these ways.
 
-create the subclass of List to use in the whole package.
+Implement the visualizer for error as a function of time as SGD is run.
+
+
+
+create the subclass of List to use in the whole package. nnlist. implement the list functions to return nnlists rather than list (such as slicing, append...)
 
 figure out the logic error in the SGD visualizer (the graph should be a smooth descending curve showing the error decreasing gradually, but it's a jagged noisy curve that doesn't show any decrease. This could be due to an error in the neural net code itself, an error in the visualizer, or even a problem with choosing meta variables in the SGD process.
 
