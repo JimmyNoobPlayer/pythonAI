@@ -1,26 +1,36 @@
-Every value that is used by a neuralnet or a trainer should be in a nnlist, a very simple subclass of a python list, which has a method to switch itself into a numpy column vector, which is used in the internal calculations of the neural net.
+********
+neuralnetutil.nnlist
+subclass of python list.
+extra method to change into a numpy column vector
+extra constructor to build itself from a numpy column vector
+extra builder methods to create a random nnlist from uniform random variables and normal random variables
+
+Every value that is used by a neuralnet or a trainer should be in a nnlist, exept internal methods in neuralnet.net which use numpy column vectors.
 
 np.random.uniform(0.0, 1.0, [self.length, 1])
 np.array([[x1],[x2],[x3]...])
 
-(should be in neuralnetutil.py and be used throughout the whole project)
 
 
 
-
+********
+trainer.trainer
 The trainer objects are iterators that return tuples of two nnlists, the first representing the input of the neural net, the second representing the output. Trainers should never raise StopIteration.
 
-Visualizers are a bit more difficult. They need to be able to visualize the error of a neural net, which means the input must have some way of being visualized (such as being uniformly spread over a domain in two dimensions.... in many implementations, visualization could be impossible or not very helpful. What kinds of visualizations are needed? This is a big question.
+function trainers are a subclass that in addition have a function that can directly take any input and give the output. Of course these functions are so simple that using a neural net to approximate them isn't efficient, it's only a way to make simple neural nets that can be observed closely. Function trainers can be put into a simple error visualizer (if the inputs can be easily visualized in 2 dimensions!)
 
-The most essential kind of visualization is the error curve, plotting the error of the neural net (as measured by a trainer) as stochastic gradient descent is run on that neural net with that trainer.
+********
+visualizer.visualizer
+Visualizers are a bit more difficult. They need to be able to visualize the error of a neural net, which means the input must have some way of being visualized (such as being uniformly spread over a domain in two dimensions.... in many implementations, visualization could be impossible or not very helpful. What kinds of visualizations are needed? This is a big question. There needs to be restrictions on which trainer/neural net pairs can be visualized, or some restriction on how the visualizations are made.
 
+Visualizers will need a way to map input vectors onto a 2-d visualization plane, and map errors into colors to put on the plane. If the input vectors are 2 dimensional that will be easy, but there might be very useful ways of mapping more complex vectors onto the visualization plane.
 
+The most essential kind of visualization is the error curve, plotting the error of the neural net (as measured by a trainer) as stochastic gradient descent is run on that neural net with that trainer. This error measure will somehow estimate the error of the entire neural net (usually by testing some sample of inputs and averaging the error) Then this visualization process will track the errors as the stochastic gradient descent is done) Should hopefully go down! Error curves on neural nets have a distinct shape, starting high and changing slowly, then increasing (conceptually the neural net is "learning some important concepts" that speed up the learning process) then evening out into a low value as the neural net is basically the best it can be with it's available "mental resources". This curve could probably be understood by another neural net....
+
+********
+neuralnet.net
 The heart of this package is neuralnet.net in the file neuralnet.py, an object that holds all the weights and biases in many layers to represent a neural net (which is a thing capable of approximating any arbitrary function to a reasonable degree of accuracy -depending on how big the neural net is- and has a backpropagation algorithm capable of minimizing the error of the net to match any function (which in practice is commonly a list of human-labeled data, or output from a crazy Monte-Carlo Tree Search gameplay system.)
 
 
-trainer.py...
-
-
-visualizer.py...
 
 

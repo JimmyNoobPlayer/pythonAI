@@ -19,7 +19,9 @@ vector representing the output of the neural net.
 '''
 import numpy as np
 import neuralnetutil as util
-import random
+
+printout_debugging = False
+debugging = True
 
 
 
@@ -32,28 +34,31 @@ class function_approx_trainer:
 is the function the net will be trained to approximate.
 Besides being iterators, the trainer should be able to
 take valid input vectors and show the expected value of
-the output vector.'''
+the output vector.
+
+This trainer is unusual because any point can be used to
+create an output then an error point. Most practical neural
+nets have a very long involved process to create
+input/output pairs (including either human input or a multistep
+process including lots of approximation) so these trainers can
+be used to "visualize" the error of a neural net by directly
+checking the error of a evenly spaced array of points, and
+forming them into a visual image.'''
         self.length = length
         self.fn = fn
     def __iter__(self):
         return self
     def __next__(self):
-        v = util.default_get_input_point(self.length)
-        return (v, self.fn(v))
-
-##    def validate_input(self, v):
-        
-
-##def pyramid(v):
-##    x = v[0,0]
-##    y = v[0,1]
-##
-##    if(x<0.5):
-##        if(y<0.5)
-        
+        v = nnlist.uniform(self.length)
+        out = self.fn(v)
+        if(debugging):
+            assert(type(v)==neuralnetutil.nnlist)
+            assert(type(out)==neuralnetutil.nnlist)
+        return (v, out)
 
 
-class limited_trainer:
+
+class wedge_trainer:
     '''this function is only defined on five
 points. two input values, the output is 0.1 on the
 corners (0,0  0,1  1,1  1,0) and 0.9 on the center 0.5,0.5. the
@@ -61,7 +66,10 @@ output for any other point is not defined. when the trainer
 selects a random point, it will only select one of these.
 
 This is meant to be a trainer that is very simple to observe
-and can be approximated by a neural net exactly.'''
+and can be approximated by a neural net exactly. It also limits
+the points given by the trainer to a subset of points, so we can
+observe what happens to the neural net when the inputs are
+constrained this way.'''
 
 
     def __init__(self):
@@ -69,17 +77,15 @@ and can be approximated by a neural net exactly.'''
     def __iter__(self):
         return self
     def __next__(self):
-        '''these dictionaries define the function'''
+        #these dictionaries define the function
         possible_points = "abcde"
-        points_selector = {"a":(0.0,0.0), "b":(0.0,1.0), "c":(1.0,0.0), "d":(1.0,1.0), "e":(0.5,0.5)}
+        points_selector = {"a":[0.0,0.0], "b":[0.0,1.0], "c":[1.0,0.0], "d":[1.0,1.0], "e":[0.5,0.5]}
         value_selector = {"a":0.1, "b":0.1, "c":0.1, "d":0.1, "e":0.9}
-
         r = random.choice(possible_points)
         rp = points_selector[r]
-
-        #debugging
-##        print("the point given in the trainer")
-##        print(rp)
+        if(printout_debugging):
+            print("the point given in the trainer")
+            print(rp)
         
         rv = value_selector[r]
         point = np.array([[rp[0]],[rp[1]]])
@@ -88,12 +94,13 @@ and can be approximated by a neural net exactly.'''
         return (point,value)
     
 def wedge(v):
-    '''takes a 2d column vector, returns a continuous function that matches the trainer at the 5 relevant points.'''
+    '''takes a 2-point nnlist, returns a continuous function
+that matches the trainer at the 5 relevant points.'''
     #the return value is only a function of the first value in v
-    inputval = v[0,0]
+    inputval = v[0]
     if(inputval>0.5): value = 1.7-1.6*inputval
     else: value = 0.1+1.6*inputval
-    return np.array([[value]])
+    return nnlist([value])
     
     
 
@@ -105,8 +112,8 @@ def example_circlefunction(inv):
     lsq = 0.0
     for x in inv:
         lsq+=(x-0.5)*(x-0.5)
-    if(lsq<=radsq): return np.array([[incirclevalue]])
-    else: return np.array([[outcirclevalue]])
+    if(lsq<=radsq): return nnlist([incircleval])
+    else: return nnlist([outcirclevalue])
 
 def example_identityfunction(inv):
     return inv
